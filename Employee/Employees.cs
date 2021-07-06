@@ -6,14 +6,14 @@ namespace Employee
 {
     public class Employees
     {
-        private DirectedSparseGraph<Employee> graph;
-        private Dictionary<string, Employee> employees;
+        private DirectedSparseGraph<Employe> graph;
+        private Dictionary<string, Employe> employees;
         
         
         public Employees(string[] lines)
         {
-            graph = new DirectedSparseGraph<Employee>();
-            employees = new Dictionary<string, Employee>();
+            graph = new DirectedSparseGraph<Employe>();
+            employees = new Dictionary<string, Employe>();
             var lns = lines.Select(a => a.Split('\t'));
             var csv = from line in lns
                 select (from piece in line
@@ -49,7 +49,7 @@ namespace Employee
                     // ensure that employee salary is a valid integer
                     if (Int32.TryParse(data[2], out sal))
                     {
-                        var empl = new Employee(data[0], data[1], sal);
+                        var empl = new Employe(data[0], data[1], sal);
                         try
                         {
                             employees.Add(empl.Id,empl);
@@ -79,13 +79,13 @@ namespace Employee
 
             }
 
-            foreach (KeyValuePair<string,Employee> kvp in employees)
+            foreach (KeyValuePair<string,Employe> kvp in employees)
             {
                 if (!string.IsNullOrEmpty(kvp.Value.Manager))
                 {
                     // check for double linking
                     bool doubleLinked = false;
-                    foreach (Employee employee in graph.DepthFirstWalk(kvp.Value).ToArray())
+                    foreach (Employe employee in graph.DepthFirstWalk(kvp.Value).ToArray())
                     {
                         if (employee.Equals(kvp.Value.Manager))
                         {
@@ -131,21 +131,21 @@ namespace Employee
         }
     }
 
-    public class Employee : IComparable<Employee>
+    public class Employe : IComparable<Employe>
     {
         public string Id { get; set; }
         public int Salary { get; set; }
         
         public string Manager { get; set; }
 
-        public Employee(string id,  string manager, int salary)
+        public Employe(string id,  string manager, int salary)
         {
             Id = id;
             Salary = salary;
             Manager = manager;
         }
         
-        public int CompareTo(Employee other)
+        public int CompareTo(Employe other)
         {
             if(other == null) return -1;
             return string.Compare(this.Id,other.Id,
